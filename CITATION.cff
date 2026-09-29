@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the repository and the associated paper."
+type: software
+title: "Correlation-Informed Quantum Learning"
+version: 0.1.0
+date-released: 2026-09-29
+authors:
+  - family-names: Tedde
+    given-names: Matteo
+    affiliation: Politecnico di Torino
+  - family-names: Girolami
+    given-names: Davide
+    affiliation: Politecnico di Torino
+repository-code: "https://github.com/teddematteo/corr-inf-quant-learning"
+license: MIT

@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "corr-inf-quant-learning"
+version = "0.1.0"
+description = "Correlation-informed learning benchmarks for many-body quantum systems"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "Matteo Tedde" }]
+keywords = [
+  "classical shadows",
+  "many-body quantum systems",
+  "quantum learning",
+  "quantum state estimation",
+]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Intended Audience :: Science/Research",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Topic :: Scientific/Engineering :: Physics",
+]
+dependencies = [
+  "matplotlib>=3.8",
+  "numpy>=1.26",
+  "tqdm>=4.66",
+]
+
+[project.optional-dependencies]
+dev = [
+  "build>=1.2",
+  "jupyterlab>=4.0",
+  "ruff>=0.9",
+]
+
+[project.scripts]
+corr-inf-benchmark = "corr_inf_quant_learning.cli:main"
+
+[project.urls]
+Repository = "https://github.com/teddematteo/corr-inf-quant-learning"
+Issues = "https://github.com/teddematteo/corr-inf-quant-learning/issues"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+extend-exclude = ["notebooks"]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP"]
