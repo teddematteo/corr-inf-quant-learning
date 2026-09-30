@@ -12,8 +12,8 @@ Official research code accompanying the article
 
 This repository implements correlation-informed measurement strategies for
 learning properties of many-body quantum systems. It compares uniform
-local-Pauli classical shadows (CS), bound-informed acquisition (BI), and their
-scalable AGHDO/QNS estimators on rotated two-dimensional cluster states.
+local-Pauli classical shadows (CS), correlation-informed acquisition (CorInf),
+and their scalable AGHDO/QNS estimators on rotated two-dimensional cluster states.
 
 ## Main results
 
@@ -29,9 +29,9 @@ scalable AGHDO/QNS estimators on rotated two-dimensional cluster states.
 ## Features
 
 - Exact Pauli-correlator oracle without allocating a \(2^n\) state vector.
-- Adaptive, bound-informed measurement design for local purity and global
+- Adaptive, correlation-informed measurement design for local purity and global
   stabilizer Rényi magic.
-- Uniform and bound-informed measurement streams evaluated under the same
+- Uniform and correlation-informed measurement streams evaluated under the same
   shot budget.
 - Scalable AGHDO/QNS estimators trained directly from measurement records.
 
@@ -63,7 +63,7 @@ config = SimulationConfig(
     k_rotations=6,
     subsystem_size=4,
     property="PURITY",
-    methods=("CS", "BI"),
+    methods=("CS", "CorInf"),
     post_shots=256,
     repetitions=3,
 )
@@ -83,7 +83,7 @@ corr-inf-benchmark --post-shots 10000
 Generated plots are written to `figures/` by default.
 
 For an interactive workflow, start JupyterLab from the repository root and
-open [`notebooks/corrInfQuantLearning.ipynb`](notebooks/corrInfQuantLearning.ipynb).
+open [`notebooks/corInfQuantLearning.ipynb`](notebooks/corInfQuantLearning.ipynb).
 
 ## Repository layout
 

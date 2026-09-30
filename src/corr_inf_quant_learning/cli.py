@@ -17,17 +17,17 @@ from .simulation import BenchmarkResult, SimulationConfig, run_benchmark
 K_ROTATIONS = (10, 30, 50)
 SUBSYSTEM_SIZES = (3, 5, 7)
 REPETITIONS = 10
-ALL_METHODS = ("CS", "BI", "AGHDO-CS", "AGHDO-BI")
+ALL_METHODS = ("CS", "CorInf", "CS-AGHDO", "CorInf-AGHDO")
 COMPARISONS = (
-    ("bi-vs-cs", ("CS", "BI")),
-    ("aghdo-bi-vs-aghdo-cs", ("AGHDO-CS", "AGHDO-BI")),
+    ("corinf-vs-cs", ("CS", "CorInf")),
+    ("corinf-aghdo-vs-cs-aghdo", ("CS-AGHDO", "CorInf-AGHDO")),
 )
 
 
 def _arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Run the requested CS/BI and AGHDO-CS/AGHDO-BI purity and magic "
+            "Run the requested CS/CorInf and CS-AGHDO/CorInf-AGHDO purity and magic "
             "comparison matrix (10 repetitions per configuration)."
         )
     )
@@ -75,15 +75,15 @@ def _config(
         evaluation_points=args.evaluation_points,
         seed=args.seed,
         count_pilot_cost=True,
-        bi_exploration=0.001,
-        bi_commuting_bias=1.0,
-        bi_candidates=100,
-        bi_purity_weight=1.0,
-        bi_generator_weight=1.0,
-        bi_softmax_temperature=0.01,
-        bi_pauli_floor=0.0,
-        bi_update_every=1,
-        bi_clip_bound="POINT",
+        corinf_exploration=0.001,
+        corinf_commuting_bias=1.0,
+        corinf_candidates=100,
+        corinf_purity_weight=1.0,
+        corinf_generator_weight=1.0,
+        corinf_softmax_temperature=0.01,
+        corinf_pauli_floor=0.0,
+        corinf_update_every=1,
+        corinf_clip_bound="POINT",
         aghdo_fit_steps=12,
         qns_property_samples=4096,
         progress_details=False,

@@ -9,9 +9,9 @@ from .simulation import BenchmarkResult
 
 _STYLES = {
     "CS": {"color": "#0072B2", "marker": "o"},
-    "BI": {"color": "#D55E00", "marker": "s"},
-    "AGHDO-CS": {"color": "#0072B2", "marker": "o"},
-    "AGHDO-BI": {"color": "#D55E00", "marker": "s"},
+    "CorInf": {"color": "#D55E00", "marker": "s"},
+    "CS-AGHDO": {"color": "#0072B2", "marker": "o"},
+    "CorInf-AGHDO": {"color": "#D55E00", "marker": "s"},
 }
 
 _RC = {

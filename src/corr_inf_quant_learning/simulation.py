@@ -29,8 +29,8 @@ from .measurement import (
 )
 from .pauli import Pauli
 
-METHODS = ("CS", "BI", "AGHDO-CS", "AGHDO-BI")
-STREAMS = (("uniform", "CS", "AGHDO-CS"), ("bound", "BI", "AGHDO-BI"))
+METHODS = ("CS", "CorInf", "CS-AGHDO", "CorInf-AGHDO")
+STREAMS = (("uniform", "CS", "CS-AGHDO"), ("bound", "CorInf", "CorInf-AGHDO"))
 MAX_SUBSYSTEM_SIZE = 12
 _REPORTS_PER_STREAM = 50
 
@@ -52,16 +52,16 @@ class SimulationConfig:
     rotation_seed: int = 1729
     count_pilot_cost: bool = True
 
-    bi_exploration: float = 0.20
-    bi_commuting_bias: float = 1.0
-    bi_candidates: int = 64
-    bi_local_regularization: float = 0.05
-    bi_purity_weight: float = 1.0
-    bi_generator_weight: float = 1.0
-    bi_softmax_temperature: float = 0.3
-    bi_pauli_floor: float = 0.1
-    bi_update_every: int = 1
-    bi_clip_bound: str = "POINT"
+    corinf_exploration: float = 0.20
+    corinf_commuting_bias: float = 1.0
+    corinf_candidates: int = 64
+    corinf_local_regularization: float = 0.05
+    corinf_purity_weight: float = 1.0
+    corinf_generator_weight: float = 1.0
+    corinf_softmax_temperature: float = 0.3
+    corinf_pauli_floor: float = 0.1
+    corinf_update_every: int = 1
+    corinf_clip_bound: str = "POINT"
 
     aghdo_rank: int = 16
     aghdo_learning_rate: float = 0.025
@@ -95,19 +95,21 @@ class SimulationConfig:
             raise ValueError("post_shots must be divisible by 4 for the order-4 U-statistic")
         if self.repetitions < 1 or self.evaluation_points < 2:
             raise ValueError("repetitions must be >=1 and evaluation_points must be >=2")
-        if not np.isfinite(self.bi_commuting_bias) or self.bi_commuting_bias < 0.0:
-            raise ValueError("bi_commuting_bias must be finite and non-negative")
-        if self.bi_update_every < 1:
-            raise ValueError("bi_update_every must be a positive integer")
-        self.bi_clip_bound = self.bi_clip_bound.upper()
-        if self.bi_clip_bound not in ("POINT", "UCB"):
-            raise ValueError("bi_clip_bound must be 'POINT' or 'UCB'")
-        if self.bi_candidates < 1:
-            raise ValueError("bi_candidates must be a positive integer")
-        if not self.bi_softmax_temperature > 0.0:
-            raise ValueError("bi_softmax_temperature must be positive")
-        if self.bi_purity_weight < 0.0 or self.bi_generator_weight < 0.0:
-            raise ValueError("bi_purity_weight and bi_generator_weight must be non-negative")
+        if not np.isfinite(self.corinf_commuting_bias) or self.corinf_commuting_bias < 0.0:
+            raise ValueError("corinf_commuting_bias must be finite and non-negative")
+        if self.corinf_update_every < 1:
+            raise ValueError("corinf_update_every must be a positive integer")
+        self.corinf_clip_bound = self.corinf_clip_bound.upper()
+        if self.corinf_clip_bound not in ("POINT", "UCB"):
+            raise ValueError("corinf_clip_bound must be 'POINT' or 'UCB'")
+        if self.corinf_candidates < 1:
+            raise ValueError("corinf_candidates must be a positive integer")
+        if not self.corinf_softmax_temperature > 0.0:
+            raise ValueError("corinf_softmax_temperature must be positive")
+        if self.corinf_purity_weight < 0.0 or self.corinf_generator_weight < 0.0:
+            raise ValueError(
+                "corinf_purity_weight and corinf_generator_weight must be non-negative"
+            )
 
 
 @dataclass(slots=True)
@@ -174,14 +176,14 @@ def _make_purity_selector(
         oracle.generators,
         subsystem,
         rng,
-        exploration=config.bi_exploration,
-        purity_weight=config.bi_purity_weight,
-        generator_weight=config.bi_generator_weight,
-        temperature=config.bi_softmax_temperature,
-        pauli_floor=config.bi_pauli_floor,
-        commuting_bias=config.bi_commuting_bias,
-        local_regularization=config.bi_local_regularization,
-        update_every=config.bi_update_every,
+        exploration=config.corinf_exploration,
+        purity_weight=config.corinf_purity_weight,
+        generator_weight=config.corinf_generator_weight,
+        temperature=config.corinf_softmax_temperature,
+        pauli_floor=config.corinf_pauli_floor,
+        commuting_bias=config.corinf_commuting_bias,
+        local_regularization=config.corinf_local_regularization,
+        update_every=config.corinf_update_every,
     )
 
 
@@ -198,9 +200,9 @@ def _make_magic_selector(
         generators,
         None if pilot is None else pilot.epsilon,
         rng,
-        candidates=config.bi_candidates,
-        temperature=config.bi_softmax_temperature,
-        exploration=config.bi_exploration,
+        candidates=config.corinf_candidates,
+        temperature=config.corinf_softmax_temperature,
+        exploration=config.corinf_exploration,
         pilot_repetitions=0 if pilot is None else config.pilot_shots,
     )
 
@@ -335,7 +337,9 @@ def _run_purity_stream(
         estimate = float("nan")
         if statistic is not None and (point is not None or due):
             bounds = (
-                selector.pauli_bounds(margin=config.bi_clip_bound == "UCB") if clipped else None
+                selector.pauli_bounds(margin=config.corinf_clip_bound == "UCB")
+                if clipped
+                else None
             )
             estimate = statistic.value(bounds)
         if point is not None:
