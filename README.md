@@ -5,7 +5,7 @@
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](pyproject.toml)
 
 Official research code accompanying the article
-[**A Few Constrain Many: Correlation-Enhanced Learning of Many-Body Quantum Systems**](link).
+[**A Few Constrain Many: Correlation-Enhanced Learning of Many-Body Quantum Systems**](https://arxiv.org/abs/2609.39935).
 
 **Authors:** Matteo Tedde and Davide Girolami<br>
 **Affiliation:** Politecnico di Torino<br>
@@ -107,7 +107,7 @@ If this repository contributes to your research, please cite the original
 article:
 
 > Matteo Tedde and Davide Girolami, [**A Few Constrain Many:
-> Correlation-Enhanced Learning of Many-Body Quantum Systems**](link)
+> Correlation-Enhanced Learning of Many-Body Quantum Systems**](https://arxiv.org/abs/2609.39935)
 
 Repository-level citation metadata is also available in [CITATION.cff](CITATION.cff).
 
