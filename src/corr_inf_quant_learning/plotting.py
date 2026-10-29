@@ -105,6 +105,11 @@ def _configuration_title(result: BenchmarkResult) -> str:
     repetitions = f"{config.repetitions} repetitions"
     if config.property == "PURITY":
         return rf"Local purity: {common}, $|A|={len(result.subsystem)}$, {repetitions}"
+    if config.property == "RENYI2":
+        return (
+            rf"Local Rényi entropy $S_2$ (nats): {common}, "
+            rf"$|A|={len(result.subsystem)}$, {repetitions}"
+        )
     pilot = "no pilot" if result.pilot_cost == 0 else f"pilot {config.pilot_shots} shots/generator"
     return rf"Stabilizer Rényi entropy $M_2$: {common}, {pilot}, {repetitions}"
 
@@ -112,6 +117,8 @@ def _configuration_title(result: BenchmarkResult) -> str:
 def _truth_label(result: BenchmarkResult) -> str:
     if result.config.property == "PURITY":
         return rf"exact $\mathrm{{Tr}}\,\rho_A^2 = {result.truth:.4g}$"
+    if result.config.property == "RENYI2":
+        return rf"exact $S_2 = {result.truth:.4g}$ nats"
     return rf"exact $M_2 = {result.truth:.4g}$"
 
 
@@ -173,6 +180,8 @@ def plot_benchmark(
             if result.config.property == "PURITY"
             else r"stabilizer Rényi entropy $M_2$"
         )
+        if result.config.property == "RENYI2":
+            property_label = r"local Rényi entropy $S_2$ (nats)"
         axis.set_ylabel(f"{'Relative' if relative else 'Absolute'} error in {property_label}")
         if result.pilot_cost == 0:
             shot_suffix = ""

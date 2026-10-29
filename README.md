@@ -73,6 +73,14 @@ print(result.truth)
 print(result.estimates)
 ```
 
+Set `property="RENYI2"` to estimate the local Rényi-2 entropy
+\(S_2(\rho_A)=-\ln\operatorname{Tr}(\rho_A^2)\), in nats. It uses the same
+measurement, acquisition and training pipeline as `PURITY`, then applies
+`-np.log(purity)` to the exact value and each estimate. An existing purity
+result can be converted without rerunning the benchmark with `result.as_renyi2()`.
+Zero purity estimates give infinity and negative estimates give `NaN`; no
+clipping is introduced.
+
 Run the complete comparison suite from the command line:
 
 ```bash
@@ -81,6 +89,8 @@ corr-inf-benchmark --post-shots 10000
 ```
 
 Generated plots are written to `figures/` by default.
+The suite also saves Rényi-2 plots derived from the purity runs, without
+additional measurements or training.
 
 For an interactive workflow, start JupyterLab from the repository root and
 open [`notebooks/corInfQuantLearning.ipynb`](notebooks/corInfQuantLearning.ipynb).

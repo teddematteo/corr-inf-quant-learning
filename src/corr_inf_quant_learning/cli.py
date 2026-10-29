@@ -27,7 +27,7 @@ COMPARISONS = (
 def _arguments() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Run the requested CS/CorInf and CS-AGHDO/CorInf-AGHDO purity and magic "
+            "Run the requested CS/CorInf and CS-AGHDO/CorInf-AGHDO purity, Renyi-2 and magic "
             "comparison matrix (10 repetitions per configuration)."
         )
     )
@@ -107,7 +107,11 @@ def _save_comparisons(
     saved: list[Path] = []
     property_name = result.config.property.lower()
     k_rotations = result.config.k_rotations
-    target = f"_a{result.config.subsystem_size:02d}" if result.config.property == "PURITY" else ""
+    target = (
+        f"_a{result.config.subsystem_size:02d}"
+        if result.config.property in ("PURITY", "RENYI2")
+        else ""
+    )
 
     for comparison_name, methods in COMPARISONS:
         plotting_result = _comparison_result(result, methods)
@@ -155,6 +159,8 @@ def main() -> None:
                 )
             )
             saved.extend(_save_comparisons(result, output_dir, args.error_mode))
+            if property_name == "PURITY":
+                saved.extend(_save_comparisons(result.as_renyi2(), output_dir, args.error_mode))
 
     tqdm.write(f"Saved {len(saved)} files in {output_dir}")
     for path in saved:

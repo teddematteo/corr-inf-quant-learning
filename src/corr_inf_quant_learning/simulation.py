@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from typing import Literal
 
 import numpy as np
@@ -41,7 +41,7 @@ class SimulationConfig:
     k_rotations: int = 50
     subsystem_size: int = 5
     methods: tuple[str, ...] = METHODS
-    property: Literal["PURITY", "MAGIC"] = "PURITY"
+    property: Literal["PURITY", "RENYI2", "MAGIC"] = "PURITY"
     theta: float = float(np.pi / 8)
 
     pilot_shots: int = 8
@@ -74,8 +74,8 @@ class SimulationConfig:
 
     def validate(self) -> None:
         self.property = self.property.upper()
-        if self.property not in ("PURITY", "MAGIC"):
-            raise ValueError("property must be 'PURITY' or 'MAGIC'")
+        if self.property not in ("PURITY", "RENYI2", "MAGIC"):
+            raise ValueError("property must be 'PURITY', 'RENYI2' or 'MAGIC'")
         unknown = set(self.methods) - set(METHODS)
         if unknown:
             raise ValueError(f"Unknown methods: {sorted(unknown)}")
@@ -120,6 +120,23 @@ class BenchmarkResult:
     estimates: dict[str, np.ndarray]
     subsystem: tuple[int, ...]
     pilot_cost: int
+
+    def as_renyi2(self) -> BenchmarkResult:
+        """Convert purity truth and estimates to S_2 = -ln(purity), in nats.
+
+        The measurement records and estimators are unchanged. Nonpositive
+        purity estimates follow NumPy's log convention: zero gives infinity
+        and negative values give NaN, without clipping the estimates.
+        """
+        if self.config.property != "PURITY":
+            raise ValueError("Renyi-2 entropy can only be derived from a PURITY result")
+        with np.errstate(divide="ignore", invalid="ignore"):
+            return replace(
+                self,
+                config=replace(self.config, property="RENYI2"),
+                truth=float(-np.log(self.truth)),
+                estimates={method: -np.log(values) for method, values in self.estimates.items()},
+            )
 
     def errors(self, mode: str = "absolute") -> dict[str, np.ndarray]:
         mode = mode.lower()
@@ -439,6 +456,10 @@ def _run_magic_stream(
 
 def run_benchmark(config: SimulationConfig) -> BenchmarkResult:
     config.validate()
+    if config.property == "RENYI2":
+        result = run_benchmark(replace(config, property="PURITY")).as_renyi2()
+        result.config = config
+        return result
     oracle = RotatedClusterState(
         config.n_qubits,
         config.k_rotations,
