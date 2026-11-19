@@ -1,5 +1,7 @@
 # Constraint-Enhanced Quantum Learning
 
+[![Tests](https://github.com/teddematteo/corr-inf-quant-learning/actions/workflows/tests.yml/badge.svg?branch=main&event=push)](https://github.com/teddematteo/corr-inf-quant-learning/actions/workflows/tests.yml)
+
 Simulation pipeline for CS and ConEnh on locally rotated Cluster and GHZ states.  
 Global magic estimation uses AGHDO in a known Clifford/product frame.
 
