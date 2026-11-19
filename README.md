@@ -1,4 +1,4 @@
-# Constrain-Enhanced Quantum Learning
+# Constraint-Enhanced Quantum Learning
 
 Simulation pipeline for CS and ConEnh on locally rotated Cluster and GHZ states.  
 Global magic estimation uses AGHDO in a known Clifford/product frame.
