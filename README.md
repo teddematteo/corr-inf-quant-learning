@@ -41,8 +41,7 @@ python -m unittest discover -s tests
 
 ## Results
 
-The CS and CS-AGHDO legend labels denote SI-CS and SI-CS-AGHDO, respectively.
-Curves show mean relative error over five realizations; bands show one standard
+Curves show mean relative error over five realizations and bands show one standard
 error of the mean.
 
 **Figure 1. Bipartite 2-Renyi entanglement entropy.**
