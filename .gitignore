@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+build/
+dist/
+.pytest_cache/
+.ruff_cache/
+.cache/
+.coverage*
+*.log
+.env
+/simulations/cache/
+/simulations/output/
+/simulations/output_*/

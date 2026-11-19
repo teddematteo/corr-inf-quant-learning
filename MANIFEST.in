@@ -1,0 +1,4 @@
+include README.md LICENSE CITATION.cff
+include simulations/config.txt simulations/run_simulations.py
+include simulations/figure_1.png simulations/figure_3.png
+recursive-include tests *.py
