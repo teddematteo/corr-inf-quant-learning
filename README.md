@@ -4,7 +4,7 @@ Simulation pipeline for CS and ConEnh on locally rotated Cluster and GHZ states.
 Global magic estimation uses AGHDO in a known Clifford/product frame.
 
 **Reference paper:**  
-Matteo Tedde and Davide Girolami, *"A Few Constrain Many: Correlation-Enhanced Learning of Many-Body Quantum Systems"* (2026).  
+Matteo Tedde and Davide Girolami, *"A Few Reveal Many: Constraint-Enhanced Learning of Many-Body Quantum Systems"* (2026).  
 [arXiv:2609.39935](https://arxiv.org/abs/2609.39935)
 
 ## Run
