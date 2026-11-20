@@ -263,7 +263,7 @@ def plot_paper_figure(
         raise ValueError(f"plot.{palette_name} must provide at least one color per selected method")
     if any(item.config.property != results[0].config.property for item in results):
         raise ValueError("All panels must estimate the same property")
-    symbol = r"\mathcal{E}_2" if results[0].config.property == "RENYI2" else r"\mathcal{M}_4"
+    symbol = r"\mathcal{E}_2" if results[0].config.property == "RENYI2" else r"\mathcal{M}_2"
     truth_symbol = rf"{symbol}^\star"
     relative = settings.error_mode == "relative"
     fallback = relative and any(np.any(np.abs(item.repetition_truths) <= 1e-14) for item in results)
